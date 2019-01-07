@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: ${ENV:prod}
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost:3306}/${DB_NAME:machine}?useUnicode=true&characterEncoding=UTF8
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:root}
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect  #不加这句则默认为myisam引擎
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    open-in-view: true
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  ###############################---redis---##############################
+  redis:
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+  ###############################---caffeine---##############################
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=36000s   #最后一次写入或访问后经过固定时间过期
+###############################---log---##############################
+logging:
+  file: ./logback.log
